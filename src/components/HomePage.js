@@ -6,6 +6,7 @@ const HomePage = () => {
     { id: 1, title: 'Song 1', artist: 'Artist 1', src: '/songs/song1.mp3', albumCover: 'https://via.placeholder.com/100' },
     { id: 2, title: 'Song 2', artist: 'Artist 2', src: '/songs/song2.mp3', albumCover: 'https://via.placeholder.com/100' },
     { id: 3, title: 'Song 3', artist: 'Artist 3', src: '/songs/song3.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 4, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
   ];
 
   const [currentSong, setCurrentSong] = useState(null);
@@ -87,27 +88,41 @@ const HomePage = () => {
   return (
     <div className="homepage">
       <header className="homepage-header">
-        <h1>Welcome to TuneNest</h1>
+        <h1>TuneNest</h1>
+        <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Search</a></li>
+            <li><a href="#">Library</a></li>
+            <li><a href="#">Profile</a></li>
+        </ul>
+        </nav>
       </header>
-
-      <section className="song-list">
-        <h2>Popular Songs</h2>
+      <div className='main-block'>
+        <aside class="sidebar">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="#">Link 1</a></li>
+                <li><a href="#">Link 2</a></li>
+                <li><a href="#">Link 3</a></li>
+                <li><a href="#">Link 4</a></li>
+            </ul>
+        </aside>
+        <section className="song-list">
+            <h2>Popular Songs</h2>
         <div className="songs">
           {songs.map((song) => (
             <div key={song.id} className="song-card">
-              <img src={song.albumCover} alt={song.title} />
               <div className="song-info">
                 <h3>{song.title}</h3>
                 <p>{song.artist}</p>
-                <button onClick={() => handleStart(song)}>Start from Beginning</button>
-                {currentSong?.id === song.id && !isPlaying && pausedTime > 0 && (
-                  <button onClick={handleResume}>Resume</button>
-                )}
+                <button onClick={() => handleStart(song)}>Play</button>
               </div>
             </div>
           ))}
         </div>
       </section>
+      </div>
 
       <footer className="music-player">
         {currentSong ? (
