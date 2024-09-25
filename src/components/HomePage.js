@@ -1,25 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './HomePage.css';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const HomePage = () => {
+  const location = useLocation();
   const songs = [
     { id: 1, title: 'Dil Kya Kare', artist: 'Artist 1', src: '/songs/Dil Kya Kare.mp3', albumCover: './songs/Dil Kya Kare.jpg' },
-    { id: 2, title: 'Song 2', artist: 'Artist 2', src: '/songs/song2.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 3, title: 'Song 3', artist: 'Artist 3', src: '/songs/song3.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 4, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 5, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 6, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 7, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 8, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 9, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 10, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 11, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 12, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 13, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 14, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 15, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
-    { id: 16, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 2, title: 'Likhe jo Khat Tujhe', artist: 'Artist 2', src: '/songs/Likhe jo Khat Tujhe.mp3', albumCover: './songs/Likhe jo Khat Tujhe.jpg' },
+    { id: 3, title: 'O Mere Dil Ke Chain', artist: 'Artist 3', src: '/songs/O Mere Dil Ke Chain.mp3', albumCover: './songs/O Mere Dil Ke Chain.jpg' },
+    { id: 4, title: 'Ye Shaam Mastani', artist: 'Artist 4', src: '/songs/Ye Shaam Mastani.mp3', albumCover: './songs/Ye Shaam Mastani.jpg' },
+    { id: 5, title: 'Chatur Naar', artist: 'Artist 4', src: '/songs/Chatur Naar.mp3', albumCover: './songs/Chatur Naar.jpeg' },
+    { id: 6, title: 'Chura Liya Hai Tumne', artist: 'Artist 4', src: '/songs/Chura Liya Hai Tumne.mp3', albumCover: './songs/Chura Liya Hai Tumne.jpg' },
+    { id: 7, title: 'Kaho Na Kaho', artist: 'Artist 4', src: '/songs/Kaho Na Kaho.mp3', albumCover: './songs/Kaho Na Kaho.jpg' },
+    { id: 8, title: 'Kisi ki Muskurahaton Pe', artist: 'Artist 4', src: '/songs/Kisi ki Muskurahaton Pe.mp3', albumCover: './songs/Kisi ki Muskurahaton Pe.jpg' },
+    { id: 9, title: 'Likhe jo Khat Tujhe', artist: 'Artist 4', src: '/songs/Likhe jo Khat Tujhe.mp3', albumCover: './songs/Likhe jo Khat Tujhe.jpg' },
+    { id: 10, title: 'Mere Mehboob', artist: 'Artist 4', src: '/songs/Mere Mehboob.mp3', albumCover: './songs/Mere Mehboob.jpeg' },
+    { id: 11, title: 'Mere Samne Wali Khidki', artist: 'Artist 4', src: '/songs/Mere Samne Wali Khidki.mp3', albumCover: './songs/Mere Samne Wali Khidki.jpg' },
+    { id: 12, title: 'Mere Sapno Ki Rani', artist: 'Artist 4', src: '/songs/Mere Sapno Ki Rani.mp3', albumCover: './songs/Mere Sapno Ki Rani.jpeg' },
+    { id: 13, title: 'Haan Tu Hain', artist: 'Artist 4', src: '/songs/Haan Tu Hain.mp3', albumCover: './songs/Haan Tu Hain.jpeg' },
+    { id: 14, title: 'Zara Sa', artist: 'Artist 4', src: '/songs/Zara Sa.mp3', albumCover: './songs/Zara Sa.jpeg' },
   ];
 
   const [currentSong, setCurrentSong] = useState(songs[0]);
@@ -28,6 +28,12 @@ const HomePage = () => {
   const [progress, setProgress] = useState(0); // Track progress of the song
   const audioRef = useRef(null);
 
+  useEffect(() => {
+    // Check if there's a song passed from the SearchPage
+    if (location.state && location.state.song) {
+      setCurrentSong(location.state.song); // Set the current song
+    }
+  }, [location.state]);
   useEffect(() => {
     if (currentSong) {
       audioRef.current.src = currentSong.src;
@@ -143,7 +149,7 @@ const handleNext = () => {
         <h1>TuneNest</h1>
         <nav>
         <ul>
-            <li><Link to='/Search'><input type="text" placeholder='Search' /></Link></li>
+            <li><Link to='/Search'>Search</Link></li>
             <li><a href="#">Home</a></li>
             <li><a href="#">Library</a></li>
             <li><Link to='/Profile'>Profile</Link></li>
@@ -167,7 +173,7 @@ const handleNext = () => {
         </div>
       </section>
       </div>
-
+      <div className='last-div'></div>
       <footer className="music-player">
         {currentSong ? (
           <>
