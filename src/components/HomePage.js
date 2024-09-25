@@ -1,29 +1,56 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './HomePage.css';
+import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   const songs = [
-    { id: 1, title: 'Song 1', artist: 'Artist 1', src: '/songs/song1.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 1, title: 'Dil Kya Kare', artist: 'Artist 1', src: '/songs/Dil Kya Kare.mp3', albumCover: './songs/Dil Kya Kare.jpg' },
     { id: 2, title: 'Song 2', artist: 'Artist 2', src: '/songs/song2.mp3', albumCover: 'https://via.placeholder.com/100' },
     { id: 3, title: 'Song 3', artist: 'Artist 3', src: '/songs/song3.mp3', albumCover: 'https://via.placeholder.com/100' },
     { id: 4, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 5, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 6, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 7, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 8, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 9, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 10, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 11, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 12, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 13, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 14, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 15, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
+    { id: 16, title: 'Song 4', artist: 'Artist 4', src: '/songs/song4.mp3', albumCover: 'https://via.placeholder.com/100' },
   ];
 
-  const [currentSong, setCurrentSong] = useState(null);
+  const [currentSong, setCurrentSong] = useState(songs[0]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [pausedTime, setPausedTime] = useState(0);
   const [progress, setProgress] = useState(0); // Track progress of the song
   const audioRef = useRef(null);
 
+  useEffect(() => {
+    if (currentSong) {
+      audioRef.current.src = currentSong.src;
+      audioRef.current.currentTime = 0;
+      // Uncomment the line below if you want to start playing the song automatically
+      // audioRef.current.play();
+      setIsPlaying(false); // Set to true if auto-play
+    }
+  }, [currentSong]);
   // Handle Start Button (Start from Beginning)
   const handleStart = (song) => {
     setCurrentSong(song);
     setPausedTime(0);
+    
     audioRef.current.src = song.src;
     audioRef.current.currentTime = 0;
-    audioRef.current.play();
-    setIsPlaying(true);
-    setProgress(0); // Reset progress for the new song
+  
+    // Wait for the audio to be ready before playing
+    audioRef.current.addEventListener('canplay', () => {
+      audioRef.current.play();
+      setIsPlaying(true);
+      setProgress(0); // Reset progress for the new song
+    }, { once: true }); // Use { once: true } to ensure the event listener is removed after the first trigger
   };
 
   // Handle Resume Button (Resume from paused time)
@@ -43,17 +70,29 @@ const HomePage = () => {
   };
 
   // Handle Next Song Button
-  const handleNext = () => {
-    const currentIndex = songs.findIndex((s) => s.id === currentSong.id);
-    const nextIndex = (currentIndex + 1) % songs.length;
-    setCurrentSong(songs[nextIndex]);
-    setPausedTime(0);
-    audioRef.current.src = songs[nextIndex].src;
-    audioRef.current.currentTime = 0;
+  // Handle Next Song Button
+const handleNext = () => {
+  const currentIndex = songs.findIndex((s) => s.id === currentSong.id);
+  const nextIndex = (currentIndex + 1) % songs.length;
+  const nextSong = songs[nextIndex];
+
+  // Stop the current song if it's playing
+  audioRef.current.pause();
+
+  // Set the new song as the current song
+  setCurrentSong(nextSong);
+  setPausedTime(0);
+  audioRef.current.src = nextSong.src;
+  audioRef.current.currentTime = 0;
+
+  // Wait for the new audio to be ready to play
+  audioRef.current.addEventListener('canplay', () => {
     audioRef.current.play();
     setIsPlaying(true);
     setProgress(0); // Reset progress for the new song
-  };
+  }, { once: true }); // Ensure the event fires once and is removed
+};
+
 
   // Update progress based on current time
   const updateProgress = () => {
@@ -75,6 +114,19 @@ const HomePage = () => {
     };
   }, [audioRef]);
 
+  useEffect(() => {
+    const audioElement = audioRef.current;
+  
+    const handleSongEnd = () => {
+      handleNext(); // Move to the next song when the current one ends
+    };
+  
+    audioElement.addEventListener('ended', handleSongEnd);
+  
+    return () => {
+      audioElement.removeEventListener('ended', handleSongEnd);
+    };
+  }, [currentSong]);
   // Handle progress bar click
   const handleProgressClick = (e) => {
     const progressBar = e.currentTarget;
@@ -91,23 +143,14 @@ const HomePage = () => {
         <h1>TuneNest</h1>
         <nav>
         <ul>
+            <li><Link to='/Search'><input type="text" placeholder='Search' /></Link></li>
             <li><a href="#">Home</a></li>
-            <li><a href="#">Search</a></li>
             <li><a href="#">Library</a></li>
-            <li><a href="#">Profile</a></li>
+            <li><Link to='/Profile'>Profile</Link></li>
         </ul>
         </nav>
       </header>
       <div className='main-block'>
-        <aside class="sidebar">
-            <h2>Menu</h2>
-            <ul>
-                <li><a href="#">Link 1</a></li>
-                <li><a href="#">Link 2</a></li>
-                <li><a href="#">Link 3</a></li>
-                <li><a href="#">Link 4</a></li>
-            </ul>
-        </aside>
         <section className="song-list">
             <h2>Popular Songs</h2>
         <div className="songs">
@@ -116,6 +159,7 @@ const HomePage = () => {
               <div className="song-info">
                 <h3>{song.title}</h3>
                 <p>{song.artist}</p>
+                <img src={song.albumCover}/>
                 <button onClick={() => handleStart(song)}>Play</button>
               </div>
             </div>
@@ -129,7 +173,9 @@ const HomePage = () => {
           <>
             <h3>Now Playing: {currentSong.title} by {currentSong.artist}</h3>
             <div className="controls">
-              <button onClick={handlePause}>Pause</button>
+              <button onClick={isPlaying ? handlePause : handleResume}>
+                {isPlaying ? 'Pause' : 'Play'}
+              </button>
               <button onClick={handleNext}>Next</button>
             </div>
             <div className="progress-bar" onClick={handleProgressClick}>
