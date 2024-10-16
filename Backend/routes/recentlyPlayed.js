@@ -8,6 +8,7 @@ router.post("/", async (req, res) => {
   const { userId, song } = req.body;
   
   try {
+    
     const user = await User.findOneAndUpdate(
       { authId: userId },
       {

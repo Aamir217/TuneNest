@@ -50,6 +50,17 @@ function ProfilePage({recentSongs,user,isAuthenticated,songs,setCurrentSong,setP
       </div>)
       }
     </div>
+    <div>
+            <h1>Your Profile</h1>
+            <h2>Recently Played Songs</h2>
+            <ul>
+                {recentSongs.map(song => (
+                    <li className='hello'>
+                        Hello
+                    </li>
+                ))}
+            </ul>
+        </div>
     </div>
   );
 }

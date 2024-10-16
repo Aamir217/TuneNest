@@ -15,7 +15,7 @@ function Library({
   filteredSongs,
 }) {
   const handleAddSong = async (song) => {
-    const updatedSongs = await addRecentlyPlayed(user, song);
+    const updatedSongs = await addRecentlyPlayed(user.sub, song.title);
     setRecentSongs(updatedSongs); // Update the state with new song list
   };
   const [visibleSongs, setVisibleSongs] = useState(8); // Initially display a limited number
@@ -27,7 +27,8 @@ function Library({
   const handleStart = (song) => {
     setCurrentSong(song);
     setPausedTime(0);
-    handleAddSong(song.sub,song.title);
+    handleAddSong(song);
+    
     if (audioRef.current) {
       audioRef.current.src = song.src;
       audioRef.current.currentTime = 0;
