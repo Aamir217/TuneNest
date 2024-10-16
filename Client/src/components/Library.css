@@ -1,0 +1,112 @@
+
+.main-block{
+    height: 30rem;
+    display: flex;
+    
+}
+
+img {
+  width: 100px;
+  height: auto;
+}
+
+  .song-list {
+    margin-top: 30px;
+    height: 30rem;
+  }
+  
+  .search-songs{
+    display: flex;
+  }
+  .song-gallery {
+    display: flex;               /* Use flexbox for horizontal layout */
+    overflow-x: auto;           /* Enable horizontal scrolling */
+    gap: 16px;                  /* Space between items */
+    padding: 10px;              /* Padding for the container */
+  }
+  
+  .song-item {
+    flex: 0 0 auto;             /* Prevent flex items from growing/shrinking */
+    text-align: center;         /* Center text under each image */
+    width: 150px;               /* Set a fixed width for each item */
+  }
+  
+  .song-item img {
+    width: 100%;                /* Make images responsive */
+    height: 100px;              /* Set a fixed height for the images */
+    object-fit: cover;          /* Maintain aspect ratio while filling the space */
+    border-radius: 4px;        /* Optional: rounded corners for images */
+  }
+  
+  .songs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  .song-card {
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    width: 150px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .song-card img {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+  }
+  
+  .song-info h3 {
+    margin: 10px 0 5px;
+    font-size: 16px;
+  }
+  
+  .song-info p {
+    color: #777;
+    font-size: 14px;
+  }
+
+  .song-card {
+    border: 1px solid #ddd; /* Light border for song cards */
+    border-radius: 8px; /* Rounded corners for song cards */
+    padding: 15px; /* Padding for song cards */
+    margin-bottom: 15px; /* Space between song cards */
+    display: flex; /* Flexbox for song card layout */
+    align-items: center; /* Center alignment */
+  }
+  
+  .song-info {
+    margin-left: 15px; /* Space between album cover and song info */
+  }
+
+  .last-div{
+    height: 650px;
+    width: 100%;
+  }
+  button {
+    background-color: #21271d; /* Button color */
+    color: white; /* Button text color */
+    border: none; /* No border */
+    padding: 10px 15px; /* Padding for buttons */
+    border-radius: 5px; /* Rounded corners for buttons */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background 0.3s; /* Smooth background transition */
+  }
+  
+  button:hover {
+    background-color: #388e3c; /* Darker green on hover */
+  }
+  .show-more-btn {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    background-color: #282828;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  

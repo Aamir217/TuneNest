@@ -1,0 +1,66 @@
+.music-player {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: white;
+    text-align: left;
+    padding: 20px;
+  }
+  .music-player h3 {
+    margin-bottom: 10px;
+  }
+  
+  .controls button {
+    background-color: white;
+    border: none;
+    color: #007bff;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .controls button:hover {
+    background-color: #f5f5f5;
+  }
+  
+  /* Progress Bar Container */
+.progress-bar {
+    width: 100%;
+    height: 12px; /* Height of the progress bar */
+    background-color: #f0f0f0; /* Light background for the progress bar */
+    border-radius: 8px; /* Rounded corners for the container */
+    cursor: pointer; /* Makes the progress bar clickable */
+    position: relative; /* Position for child elements */
+    overflow: hidden; /* Hide overflow to create a smooth edge */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  /* Progress Fill */
+  .progress {
+    height: 100%; /* Fill the height of the progress bar */
+    background: linear-gradient(90deg, #4caf50, #81c784); /* Green gradient */
+    border-radius: 8px; /* Rounded corners for the progress fill */
+    transition: width 0.1s; /* Smooth transition for the fill */
+  }
+  
+  /* Progress Fill Hover Effect */
+  .progress-bar:hover .progress {
+    background: linear-gradient(90deg, #66bb6a, #c6ff00); /* Lighter gradient on hover */
+  }
+  
+  /* Additional Styling for Better User Experience */
+  .music-player {
+    margin-top: 20px; /* Space between the player and the song list */
+    padding: 20px; /* Padding for the player section */
+    background-color: #282828; /* White background for contrast */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  .controls {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+    margin: 10px 0; /* Margin around controls */
+  }
+ 
