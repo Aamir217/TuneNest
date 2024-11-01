@@ -40,3 +40,8 @@
     color: #333;
     line-height: 1.6;
   }
+
+  .profile-last-div{
+    height: 200px;
+    width: 100%;
+  }

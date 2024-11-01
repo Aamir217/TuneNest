@@ -2,6 +2,7 @@
 const express = require("express");
 const connectDB = require("./config/DB"); // MongoDB connection
 const recentlyPlayedRoutes = require("./routes/recentlyPlayed"); // API routes
+const likedSongsRoutes = require('./routes/likedSongs');
 const cors = require("cors");
 
 const app = express();
@@ -17,7 +18,7 @@ connectDB();
 
 // Set up API routes
 app.use("/api/recently-played", recentlyPlayedRoutes);
-
+app.use("/api/liked-songs",likedSongsRoutes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
