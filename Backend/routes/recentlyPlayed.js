@@ -29,6 +29,12 @@ router.post("/", async (req, res) => {
       {
         user.recentlyPlayed = user.recentlyPlayed.slice(0,7);
       }
+      if (user.songsMap.has(req.body.params.id)) {
+        const count=user.songsMap.get(req.body.params.id);
+        user.songsMap.set(req.body.params.id, count + 1);
+      } else {
+        user.songsMap.set(req.body.params.id, 1); // Set initial count if song is not yet in map
+      }
       await user.save();
       res.status(200).json(user.recentlyPlayed);
     }
@@ -38,6 +44,7 @@ router.post("/", async (req, res) => {
         authId: req.body.params.userId,
         recentlyPlayed: [obj],
         likedSongs: [],
+        songsMap: {[req.body.params.id]:1},
       });
       await newUser.save();
       res.status(201).json(newUser.recentlyPlayed);
@@ -59,11 +66,13 @@ router.get("/", async (req, res) => {
       return res.status(200).json({
         recentlyPlayed:[],
         likedSongs:[],
+        songsMap:{},
       });
     }
     res.status(200).json({
       recentlyPlayed: user.recentlyPlayed || [],
       likedSongs: user.likedSongs || [],
+      songsMap: user.songsMap || {},
     });
   } catch (error) {
     console.error("Error retrieving recently played songs:", error);

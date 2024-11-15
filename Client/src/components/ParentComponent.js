@@ -5,14 +5,15 @@ import MediaPlayer from "./MediaPlayer";
 import ProfilePage from "../Pages/Profile_Page";
 import Playlist from "./Playlist";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { getRecentlyPlayed } from '../api/recentlyPlayed';
+import { getRecentlyPlayed } from "../api/recentlyPlayed";
 import { useAuth0 } from "@auth0/auth0-react";
 
 function ParentComponent() {
-  const [selectedSongs,setSelectedSongs] = useState([])
-  const [likeSongs,setLikedSongs] = useState([]);
+  const [songsMap,setSongsMap] = useState(new Map());
+  const [selectedSongs, setSelectedSongs] = useState([]);
+  const [likeSongs, setLikedSongs] = useState([]);
   const [recentSongs, setRecentSongs] = useState([]);
-  const {user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredSongs, setFilteredSongs] = useState([]);
   const [currentSong, setCurrentSong] = useState("");
@@ -24,11 +25,11 @@ function ParentComponent() {
   // Fetch recently played songs on component load
   useEffect(() => {
     const fetchRecentSongs = async () => {
-      if(isAuthenticated)
-      {
+      if (isAuthenticated) {
         const songss = await getRecentlyPlayed(user.sub);
         setLikedSongs(songss.likedSongs);
         setRecentSongs(songss.recentlyPlayed);
+        //setSongsMap(songss.songsMap);
       }
     };
 
@@ -135,12 +136,10 @@ function ParentComponent() {
     },
   ];
 
-
   return (
     <Router>
       <div>
         <NavBar
-          songs={songs}
           setSearchTerm={setSearchTerm}
           setFilteredSongs={setFilteredSongs}
         />
@@ -149,13 +148,13 @@ function ParentComponent() {
             path="/"
             element={
               <Library
-              selectedSongs={selectedSongs}
-              setSelectedSongs={setSelectedSongs}
-              isLiked={isLiked}
-              setLiked={setLiked}
-              likesongs={likeSongs}
-              user={user}
-              setRecentSongs={setRecentSongs}
+                selectedSongs={selectedSongs}
+                setSelectedSongs={setSelectedSongs}
+                isLiked={isLiked}
+                setLiked={setLiked}
+                likesongs={likeSongs}
+                user={user}
+                setRecentSongs={setRecentSongs}
                 audioRef={audioRef}
                 setIsPlaying={setIsPlaying}
                 setProgress={setProgress}
@@ -164,14 +163,17 @@ function ParentComponent() {
                 songs={songs}
                 searchTerm={searchTerm}
                 filteredSongs={filteredSongs}
+                setFilteredSongs={setFilteredSongs}
               />
             }
           />
-          <Route path ="/playlist" element={<Playlist/>}/>
+          <Route path="/playlist" element={<Playlist />} />
           <Route
             path="/profile"
             element={
               <ProfilePage
+                songsMap={songsMap}
+                setSongsMap={setSongsMap}
                 likeSongs={likeSongs}
                 recentSongs={recentSongs}
                 user={user}

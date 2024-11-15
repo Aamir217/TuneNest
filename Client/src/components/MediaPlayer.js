@@ -27,7 +27,7 @@ function MediaPlayer({
       currentSong.name,
       artistNames,
       currentSong.downloadUrl[currentSong.downloadUrl.length-1].url,
-      currentSong.image[0].url
+      currentSong.image[currentSong.image.length-1].url
     );
     setLikedSongs(updatedLikedSongs.likedSongs); // Update the state with new song list
   };

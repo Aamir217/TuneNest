@@ -3,20 +3,23 @@ import { Link } from "react-router-dom";
 import "./NavBar.css";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 function NavBar({ songs, setSearchTerm, setFilteredSongs }) {
   const location = useLocation();
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
-  const handleSearch = (event) => {
+  const handleSearch = async (event) => {
     const query = event.target.value.toLowerCase();
     setSearchTerm(query);
     if (query) {
-      const results = songs.filter(
-        (song) =>
-          song.title.toLowerCase().includes(query) ||
-          song.artist.toLowerCase().includes(query)
-      );
-      setFilteredSongs(results);
+      const searchResult = await axios.get(`https://saavn.dev/api/search/songs?query=${query}`);
+      console.log(searchResult.data.data.results);
+      // const results = songs.filter(
+      //   (song) =>
+      //     song.title.toLowerCase().includes(query) ||
+      //     song.artist.toLowerCase().includes(query)
+      // );
+      setFilteredSongs(searchResult.data.data.results);
     } else {
       setFilteredSongs([]);
     }

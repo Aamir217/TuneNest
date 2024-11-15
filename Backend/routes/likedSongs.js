@@ -14,19 +14,19 @@ router.post("/", async (req, res) => {
     }
     try {
       const user = await User.findOne({authId: req.body.params.userId});
-      console.log(user);
       if(!user)
       {
         const newUser = new User({
           authId: req.body.params.userId,
           recentlyPlayed: [],
           likedSongs: [obj],
+          songsMap:{},
         });
         await newUser.save();
         return res.status(201).json(newUser.likedSongs);
       }
       const songExists = user.likedSongs.some(song => song.id === req.body.params.id);
-  
+      
       if (songExists) {
         return res.status(201).json({ message: 'Song is already liked.',likedSongs:user.likedSongs });
       }

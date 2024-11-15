@@ -14,6 +14,11 @@ const userSchema = new mongoose.Schema({
   authId: { type: String, required: true, unique: true }, // Auth0 user ID
   recentlyPlayed: { type: [songSchema], default: [] },
   likedSongs: { type: [songSchema], default: [] }, // Array of recently played songs
+  songsMap:{
+    type: Map,
+    of: Number,
+    required:true
+  },
 });
 
 const User = mongoose.model("User", userSchema);

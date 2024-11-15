@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./Profile_Page.css";
+import { getRecentlyPlayed } from "../api/recentlyPlayed";
+import Recommendations from "../components/Recommendations";
 
 function ProfilePage({
+  songsMap,
+  setSongsMap,
   likeSongs,
   recentSongs,
   user,
@@ -13,8 +18,55 @@ function ProfilePage({
   setIsPlaying,
   setProgress,
 }) {
+  const [recommendationSongs,setRecommendationSongs]=useState([]);
+  const [isClick, setIsClick] = useState(false);
+  const handleRecommendation = async () => {
+    setIsClick(true);
+    if (isAuthenticated) {
+      const songss = await getRecentlyPlayed(user.sub);
+      //console.log(songss.songsMap);
+      setSongsMap(songss.songsMap);
+      const entries = Object.entries(songsMap);
+
+      // Sort the array by play count in descending order
+      const sortedEntries = entries.sort((a, b) => b[1] - a[1]);
+
+      // Extract the top N song IDs
+      const topSongs = sortedEntries.slice(0, 3).map((entry) => entry[0]);
+      const top3Songs = topSongs.map((id) =>
+        axios.get(`https://saavn.dev/api/songs/${id}`)
+      );
+      const singerResponses = await Promise.all(top3Songs);
+      const allUniqueArtistsIds = Array.from(
+        new Set(
+          singerResponses.flatMap((response) =>
+            response.data.data[0].artists.all.map((artist) => artist.id)
+          )
+        )
+      );
+      const randomArtistsIds = getRandomItems(allUniqueArtistsIds, 3);
+      const randomArtistsSongs = randomArtistsIds.map((id) =>
+        axios.get(`https://saavn.dev/api/artists/${id}/songs`)
+      );
+      const RecommendationResponse = await Promise.all(randomArtistsSongs);
+      console.log(RecommendationResponse);
+      const allSongs = RecommendationResponse.flatMap((response) => 
+        response.data.data.songs
+      );
+      const randomSongs = getRandomItems(allSongs, 10);
+
+      // Log the selected random songs
+      console.log(randomSongs);
+  
+      // Set the random songs to state
+      setRecommendationSongs(randomSongs);
+    }
+  };
+  const getRandomItems = (arr, n) => {
+    const shuffled = [...arr].sort(() => 0.5 - Math.random());  // Shuffle the array
+    return shuffled.slice(0, n);  // Pick the first 'n' items from the shuffled array
+};
   const handleStart = (song) => {
-    console.log(song);
     setCurrentSong(song);
     setPausedTime(0);
 
@@ -32,7 +84,7 @@ function ProfilePage({
           setIsPlaying(true);
           setProgress(0); // Reset progress for the new song
         },
-       { once: true }
+        { once: true }
       ); // Use { once: true } to ensure the event listener is removed after the first trigger
     }
   };
@@ -69,13 +121,34 @@ function ProfilePage({
       </div>
       {isAuthenticated && (
         <div>
+          {/* <h2>Recommended Songs</h2>
+          <div className="song-gallery">
+            {recentSongs.map((song) => (
+              <div key={song.id} className="song-card">
+                <div className="song-info">
+                  <h3>{song.title}</h3>
+                  <img src={song.image} alt={song.title} />
+                  <button onClick={() => handleStart(song)}>Play</button>
+                </div>
+              </div>
+            ))}
+          </div> */}
+          <button onClick={handleRecommendation}>
+            Click For Recommendation
+          </button>
+          {isClick ? (
+            <Recommendations 
+              recommendationSongs={recommendationSongs}
+            />
+          ) : (
+            <div></div>
+          )}
           <h2>Recently Played Songs</h2>
           <div className="song-gallery">
             {recentSongs.map((song) => (
               <div key={song.id} className="song-card">
                 <div className="song-info">
                   <h3>{song.title}</h3>
-                  <p>{song.artist.join(', ')}</p>
                   <img src={song.image} alt={song.title} />
                   <button onClick={() => handleStart(song)}>Play</button>
                 </div>
@@ -88,7 +161,6 @@ function ProfilePage({
               <div key={song.id} className="song-card">
                 <div className="song-info">
                   <h3>{song.title}</h3>
-                  <p>{song.artist.join(', ')}</p>
                   <img src={song.image} alt={song.title} />
                   <button onClick={() => handleStart(song)}>Play</button>
                 </div>

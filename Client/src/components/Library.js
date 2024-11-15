@@ -19,6 +19,7 @@ function Library({
   songs,
   searchTerm,
   filteredSongs,
+  setFilteredSongs,
 }) {
   const playlistMap = {
     '459633': 'Atif Aslam',
@@ -30,6 +31,7 @@ function Library({
     '468245': 'Diljit Dosanjh',
     '712878': 'Guru Randhawa',
     '3319750': 'Sidhu Moose Wala',
+    '455125' : 'Sonu Nigam',
 };
 
   const playlistIds = Object.keys(playlistMap);
@@ -66,7 +68,7 @@ function Library({
 
   const handleAddSong = async (song) => {
     const artistNames = song.artists.all.map(artist => artist.name);
-    const updatedSongs = await addRecentlyPlayed(user.sub, song.id, song.name, artistNames, song.downloadUrl[song.downloadUrl.length-1].url, song.image[0].url);
+    const updatedSongs = await addRecentlyPlayed(user.sub, song.id, song.name, artistNames, song.downloadUrl[song.downloadUrl.length-1].url, song.image[song.image.length-1].url);
     setRecentSongs(updatedSongs); // Update the state with new song list
   };
 
@@ -77,7 +79,6 @@ function Library({
   };
 
   const handleStart = (song) => {
-    console.log(song);
     setCurrentSong(song);
     setPausedTime(0);
     handleAddSong(song);
@@ -108,9 +109,8 @@ function Library({
         {filteredSongs.length > 0 && filteredSongs.map((song) => (
           <div key={song.id} className="song-card">
             <div className="song-info">
-              <h3>{song.title}</h3>
-              <p>{song.artist}</p>
-              <img src={song.albumCover} alt={song.title} />
+              <h3>{song.name}</h3>
+              <img src={song.image[2].url} alt={song.name} />
               <button onClick={() => handleStart(song)}>Play</button>
             </div>
           </div>
