@@ -41,9 +41,10 @@ function NavBar({ songs, setSearchTerm, setFilteredSongs }) {
           <li>
             <Link to="/">Home</Link>
           </li>
-          <li>
+          {isAuthenticated &&
+            <li>
             <Link to ="/playlist">Playlists</Link>
-          </li>
+          </li>}
           <li>
             <Link to={"/profile"}>Profile</Link>
           </li>

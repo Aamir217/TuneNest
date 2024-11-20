@@ -89,7 +89,6 @@ function Library({
     if (audioRef.current) {
       audioRef.current.src = song.downloadUrl[song.downloadUrl.length-1].url;
       audioRef.current.currentTime = 0;
-      console.log(audioRef);
 
       audioRef.current.addEventListener("canplay", () => {
         console.log(audioRef);
